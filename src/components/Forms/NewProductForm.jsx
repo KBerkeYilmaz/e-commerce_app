@@ -1,5 +1,5 @@
 import { useState } from "react";
-import utility from "../../Utility/Utility.module.css";
+import utility from "../Utility/Utility.module.css"
 import ButtonBlock from "../UI/ButtonBlock";
 import Label from "../UI/Label";
 
@@ -60,7 +60,7 @@ const NewProductForm = (props) => {
   return (
     <form
       className={`w-3/6 h-1/2 p-12 text-black border-4 border-slate-900 border-solid ${utility["flex-col-center"] } gap-5 rounded-lg`}
-      action="http://localhost:8000/server.php"
+      action="http://localhost:8000/index.php"
       method="post"
       onSubmit={(event) => handleSubmit(event)}
       id="product_form"
@@ -115,8 +115,7 @@ const NewProductForm = (props) => {
       </div>
       <ButtonBlock
         className="btn btn-primary bg-black hover:bg-slate-950"
-        type="submit"
-      >
+        type="submit">
         Submit
       </ButtonBlock>
      
