@@ -5,7 +5,7 @@ header('Access-Control-Allow-Headers: token, Content-Type');
 
 class ProductFactory
 {
-    private $productTypes;
+    public $productTypes;
 
     public function __construct()
     {
@@ -55,7 +55,6 @@ class DISK extends Product
 
     public function __construct($name, $sku, $price, $type, $size) // added $size
     {   
-
         parent::__construct($name, $sku, $price, $type);
         $this->size = $size;
     }

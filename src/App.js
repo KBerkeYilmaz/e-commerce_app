@@ -3,7 +3,10 @@ import Layout from "./components/Layout/Layout";
 import ProductListPage from "./pages/product_list";
 import NewProductPage from "./pages/new_product";
 
-function App(props) {
+
+function App() {
+
+
 
   return (
     <Router>
