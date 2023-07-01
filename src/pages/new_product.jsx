@@ -1,22 +1,14 @@
 import NewProductForm from "../components/Forms/NewProductForm";
-import { useState } from "react";
 import AnimatedBlobBlock from "../components/Utility/AnimatedBlobBlock";
 
-function NewProductPage() {
-  const [items, setItems] = useState([]);
-
-  const newProductHandler = (data) => {
-    setItems((prevState) => [data, ...prevState]);
-    console.log(items)
-  };
-
+function NewProductPage(props) {
   return (
-    <>
-      <AnimatedBlobBlock />
-      <section className="absolute top-[8rem] left-10 w-screen h-[52.5rem] grid grid-cols-2">
-        <NewProductForm newProductHandler={newProductHandler} />
-      </section>
-    </>
+    <section>
+      {/* <AnimatedBlobBlock /> */}
+      <main className="w-screen h-screen flex flex-col justify-center items-center px-10">
+        <NewProductForm />
+      </main>
+    </section>
   );
 }
 

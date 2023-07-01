@@ -1,0 +1,4 @@
+POST: POST's added product with mentioned specifications. 
+GET: GET's related products from the database. 
+DELETE: Deletes one or multiple products from the database. Mass delete should instantiate form the mass delete (#mass-delete) button.
+Other deletions should instantiate from using a single delete button on the container. 

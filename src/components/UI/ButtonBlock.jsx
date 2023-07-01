@@ -1,14 +1,5 @@
-import {block} from 'million/react'
 
-
-const ButtonBlock = block(function Button({
-  type,
-  id,
-  name,
-  children,
-  className,
-  isDisabled,
-}) {
+function Button({ type, id, name, children, className, isDisabled }) {
   return (
     <button
       className={className}
@@ -20,6 +11,6 @@ const ButtonBlock = block(function Button({
       {children}
     </button>
   );
-});
+}
 
-export default ButtonBlock;
+export default Button;

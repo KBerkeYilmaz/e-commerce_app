@@ -2,7 +2,7 @@ import Navbar from "./Navbar/Navbar";
 
 const Header = (props) => {
   return (
-    <header className="w-screen h-max absolute top-0">
+    <header className="w-screen h-max">
       <Navbar />
     </header>
   );
