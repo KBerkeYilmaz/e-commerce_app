@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import utility from "../Utility/Utility.module.css";
 import ButtonBlock from "../UI/ButtonBlock";
-import FurnitureProperties from "./FormItems/FurnitureProperties";
-import BookProperties from "./FormItems/BookProperties";
+import DVDProperties from "./FormItems/__TypeProperties/DVDProperties";
 import Input from "../UI/Input";
-import DiskProperties from "./FormItems/DiskProperties";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../Hooks/useFetch";
 import { API_URL } from "../../config";
+import FurnitureProperties from "./FormItems/__TypeProperties/FurnitureProperties";
+import BookProperties from "./FormItems/__TypeProperties/BookProperties";
 
 // import DiskProperties from "./FormItems/DiskProperties";
 
@@ -17,10 +17,30 @@ const NewProductForm = (props) => {
   const [price, setPrice] = useState("");
   const [type, setType] = useState("Type Switcher");
   const [isType, setIsType] = useState(" ");
-  const [size, setSize] = useState(0);
+  const [size, setSize] = useState(" ");
   const [weight, setWeight] = useState(" ");
+  const [height, setHeight] = useState(" ");
+  const [width, setWidth] = useState(" ");
+  const [length, setLength] = useState(" ");
   const [isToogled, setIsToogled] = useState(true);
-  const [fetchData, isLoading, error] = useFetch('POST');
+  const [fetchData, isLoading, error] = useFetch("POST");
+  const [products, setProducts] = useState([]);
+ 
+  const handleHeightChange = (e) => {
+    const value = parseInt(e.target.value);
+    setHeight(value);
+  };
+
+  const handleWidthChange = (e) => {
+    const value = parseInt(e.target.value);
+    setWidth(value);
+  };
+
+  const handleLengthChange = (e) => {
+    const value = parseInt(e.target.value);
+    setLength(value);
+  };
+
 
   let navigate = useNavigate();
 
@@ -45,8 +65,8 @@ const NewProductForm = (props) => {
     if (value === "furniture") {
       setIsType("Furniture");
       setIsToogled(true);
-    } else if (value === "disk") {
-      setIsType("DISK");
+    } else if (value === "dvd") {
+      setIsType("DVD");
       setIsToogled(true);
     } else if (value === "book") {
       setIsType("Book");
@@ -75,26 +95,28 @@ const NewProductForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-//    const form = e.target;
     const formData = {
-      sku: sku,
-      name: name,
-      price: price,
-      productType: type,
-      size: size,
+      product_sku: sku,
+      product_name: name,
+      product_price: price,
+      product_type: type
     };
 
-    fetchData(API_URL, formData)
-    navigate('/')
-      
-  };
+    fetchData(API_URL + "/pages/add", formData).then(() => {
+      // Fetch the list of products again after a new product is added
+      fetchData(API_URL + "/pages/get").then((data) => {
+        setProducts(data);
+      });
+    });
+    navigate("/");
+  }
 
-  const optionArray = ["Type Switcher", "disk", "furniture", "book"];
-  const optionText = ["Type Switcher", "DISK", "Furniture", "Book"];
+  const optionArray = ["Type Switcher", "dvd", "furniture", "book"];
+  const optionText = ["Type Switcher", "DVD", "Furniture", "Book"];
 
   return (
     <form
-      className={`w-1/2 h-fit p-12 text-black border-4 border-slate-900 border-solid ${utility["flex-col-center"]} gap-5 rounded-lg`}
+      className={`w-1/3 h-fit p-12 text-black border-4 border-slate-900 border-solid ${utility["flex-col-center"]} gap-5 rounded-lg`}
       onSubmit={(event) => handleSubmit(event)}
       id="product_form"
     >
@@ -149,23 +171,24 @@ const NewProductForm = (props) => {
 
       {isType === "Furniture" && (
         <FurnitureProperties
-          onChange={handleSizeChange}
-          value={size}
-          id="size"
+          height={height}
+          onHeightChange={handleHeightChange}
+          width={width}
+          onWidthChange={handleWidthChange}
+          length={length}
+          onLengthChange={handleLengthChange}
           type="number"
-        >
-          <h3>Size </h3>
-        </FurnitureProperties>
+      />
+          
       )}
-      {isType === "DISK" && (
-        <DiskProperties
+      {isType === "DVD" && (
+        <DVDProperties
           onChange={handleSizeChange}
           value={size}
           id="size"
           type="number"
-        >
-          <h3>Size </h3>
-        </DiskProperties>
+        />
+         
       )}
       {isType === "Book" && (
         <BookProperties

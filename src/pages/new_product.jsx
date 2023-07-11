@@ -3,11 +3,9 @@ import AnimatedBlobBlock from "../components/Utility/AnimatedBlobBlock";
 
 function NewProductPage(props) {
   return (
-    <section>
+    <section className="w-screen h-full flex flex-col justify-center items-center px-10  my-14">
       {/* <AnimatedBlobBlock /> */}
-      <main className="w-screen h-screen flex flex-col justify-center items-center px-10">
-        <NewProductForm />
-      </main>
+      <NewProductForm />
     </section>
   );
 }

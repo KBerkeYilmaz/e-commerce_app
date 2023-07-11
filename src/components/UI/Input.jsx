@@ -24,8 +24,7 @@ const Input = ({ type, id, value, onChange, children, className }) => {
                     peer-placeholder-shown:translate-y-0
                     peer-focus:scale-75
                     peer-focus:-translate-y-6
-                    
-                    
+                    cursor-pointer
                     `}
         htmlFor={id}
       >

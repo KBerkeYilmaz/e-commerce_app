@@ -1,6 +1,6 @@
-import Input from "../../UI/Input";
+import Input from "../../../UI/Input";
 
-const DiskProperties = (props) => {
+const DVDProperties = (props) => {
   return (
     <>
       <Input 
@@ -8,10 +8,10 @@ const DiskProperties = (props) => {
       type={props.type}
       value={props.value}
       onChange={props.onChange}
-      >Size &nbsp;</Input>
+      >Size</Input>
       <p className="text-lg">Please provide size in megabytes (mb).</p>
     </>
   );
 };
 
-export default DiskProperties;
+export default DVDProperties;
