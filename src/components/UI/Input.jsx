@@ -1,4 +1,4 @@
-const Input = ({ type, id, value, onChange, children, className }) => {
+const Input = ({ type, id, value, onChange, children, className, onClick }) => {
   return (
     <div className="relative">
       <input
@@ -9,23 +9,11 @@ const Input = ({ type, id, value, onChange, children, className }) => {
         name={id}
         value={value}
         onChange={onChange}
-        key={id}
+        onClick={onClick}
+        min="0"
       />
       <label
-        className={`absolute
-                    duration-100
-                    transform
-                    -translate-y-6
-                    scale-75
-                    origin-[0]
-                    left-2
-                    top-0.5
-                    peer-placeholder-shown:scale-100
-                    peer-placeholder-shown:translate-y-0
-                    peer-focus:scale-75
-                    peer-focus:-translate-y-6
-                    cursor-pointer
-                    `}
+        className={`absolute duration-100 transform -translate-y-6 scale-75 origin-[0] left-2 top-0.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 cursor-pointer`}
         htmlFor={id}
       >
         {children}
@@ -35,6 +23,3 @@ const Input = ({ type, id, value, onChange, children, className }) => {
 };
 
 export default Input;
-
-
-

@@ -1,6 +1,10 @@
 import Input from "../../../UI/Input";
 
 const DVDProperties = (props) => {
+
+
+
+
   return (
     <>
       <Input 

@@ -1,48 +1,63 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import utility from "../Utility/Utility.module.css";
 import ButtonBlock from "../UI/ButtonBlock";
-import DVDProperties from "./FormItems/__TypeProperties/DVDProperties";
 import Input from "../UI/Input";
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "../Hooks/useFetch";
-import { API_URL } from "../../config";
+import DVDProperties from "./FormItems/__TypeProperties/DVDProperties";
 import FurnitureProperties from "./FormItems/__TypeProperties/FurnitureProperties";
 import BookProperties from "./FormItems/__TypeProperties/BookProperties";
-
-// import DiskProperties from "./FormItems/DiskProperties";
+import { mutate } from "swr";
+import { useFetch } from "../Hooks/useFetch";
+import { API_URL } from "../../config";
 
 const NewProductForm = (props) => {
   const [name, setName] = useState("");
   const [sku, setSKU] = useState("");
   const [price, setPrice] = useState("");
-  const [type, setType] = useState("Type Switcher");
-  const [isType, setIsType] = useState(" ");
-  const [size, setSize] = useState(" ");
+  const [type, setType] = useState("");
+  const [size, setSize] = useState("");
   const [weight, setWeight] = useState(" ");
   const [height, setHeight] = useState(" ");
   const [width, setWidth] = useState(" ");
   const [length, setLength] = useState(" ");
-  const [isToogled, setIsToogled] = useState(true);
   const [fetchData, isLoading, error] = useFetch("POST");
   const [products, setProducts] = useState([]);
- 
-  const handleHeightChange = (e) => {
-    const value = parseInt(e.target.value);
-    setHeight(value);
-  };
-
-  const handleWidthChange = (e) => {
-    const value = parseInt(e.target.value);
-    setWidth(value);
-  };
-
-  const handleLengthChange = (e) => {
-    const value = parseInt(e.target.value);
-    setLength(value);
-  };
-
 
   let navigate = useNavigate();
+
+  const formElements = [
+    {
+      key: 1,
+      id: "sku",
+      type: "text",
+      title: "SKU",
+      value: sku,
+      onChange: (event) => handleSKUChange(event),
+    },
+    {
+      key: 2,
+      id: "name",
+      type: "text",
+      title: "Name",
+      value: name,
+      onChange: (event) => handleNameChange(event),
+    },
+    {
+      key: 3,
+      id: "price",
+      type: "number",
+      title: "Price ($)",
+      value: price,
+      onChange: (event) => handlePriceChange(event),
+    },
+    {
+      key: 4,
+      id: "productType",
+      type: "text",
+      value: type,
+      onChange: (event) => handleTypeChange(event),
+    },
+  ];
 
   const handleNameChange = (e) => {
     const value = e.target.value;
@@ -62,20 +77,6 @@ const NewProductForm = (props) => {
   const handleTypeChange = (e) => {
     const value = e.target.value;
     setType(value);
-    if (value === "furniture") {
-      setIsType("Furniture");
-      setIsToogled(true);
-    } else if (value === "dvd") {
-      setIsType("DVD");
-      setIsToogled(true);
-    } else if (value === "book") {
-      setIsType("Book");
-      setIsToogled(true);
-    } else if (value === "Type Switcher") {
-      setIsToogled(false);
-    } else {
-      setIsType(null);
-    }
   };
 
   const handleSizeChange = (e) => {
@@ -88,88 +89,87 @@ const NewProductForm = (props) => {
     setWeight(value);
   };
 
-  // const handleFurnitureChange = (e) => {
-  //   const value = parseInt(e.target.value)
+  const handleWidthChange = (e) => {
+    const value = parseInt(e.target.value);
+    setWidth(value);
+  };
 
-  // }
+  const handleLengthChange = (e) => {
+    const value = parseInt(e.target.value);
+    setLength(value);
+  };
 
-  const handleSubmit = (e) => {
+  const handleHeightChange = (e) => {
+    const value = parseInt(e.target.value);
+    setHeight(value);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       product_sku: sku,
       product_name: name,
       product_price: price,
-      product_type: type
+      product_type: type,
+      size: size,
     };
-
-    fetchData(API_URL + "/pages/add", formData).then(() => {
-      // Fetch the list of products again after a new product is added
-      fetchData(API_URL + "/pages/get").then((data) => {
-        setProducts(data);
-      });
-    });
-    navigate("/");
-  }
-
-  const optionArray = ["Type Switcher", "dvd", "furniture", "book"];
-  const optionText = ["Type Switcher", "DVD", "Furniture", "Book"];
+    
+    try {
+      await fetchData(API_URL + "/products/new", formData);
+      mutate(API_URL + "/products/exhibit"); 
+      navigate("/product_list");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <form
-      className={`w-1/3 h-fit p-12 text-black border-4 border-slate-900 border-solid ${utility["flex-col-center"]} gap-5 rounded-lg`}
-      onSubmit={(event) => handleSubmit(event)}
+      className={`w-1/3 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid ${utility["flex-col-center"]} gap-5 rounded-lg`}
+      onSubmit={handleSubmit}
       id="product_form"
     >
-      <Input
-        id="sku"
-        type="text"
-        value={sku}
-        onChange={(event) => handleSKUChange(event)}
-      >
-        <h3>SKU</h3>
-      </Input>
+      {formElements.slice(0, 3).map((item) => {
+        return (
+          <Input
+            key={item.key}
+            id={item.id}
+            type={item.type}
+            value={item.value}
+            onChange={item.onChange}
+          >
+            <h3>{item.title}</h3>
+          </Input>
+        );
+      })}
 
-      <Input
-        id="name"
-        type="text"
-        value={name}
-        onChange={(event) => handleNameChange(event)}
-      >
-        <h3>Name</h3>
-      </Input>
-      <Input
-        id="price"
-        type="number"
-        value={price}
-        onChange={(event) => handlePriceChange(event)}
-      >
-        <h3>Price($)</h3>
-      </Input>
-
-      {/* TYPE SELECTOR */}
-
-      <div className=" border-b-slate-900 border-black rounded-sm p-1 border-2">
-        <label htmlFor="productType">Type:&nbsp;</label>
-        <select
-          className="bg-white "
-          type="text"
-          id="productType"
-          name="productType"
-          value={type}
-          onChange={(event) => handleTypeChange(event)}
+      <div className="relative w-48 border-2 border-black flex justify-between items-center">
+        <label
+          htmlFor="productType"
+          className="pl-1"
         >
-          {optionArray.map((option, index) => (
-            <option
-              key={index}
-              value={option}
-            >
-              {optionText[index]}
-            </option>
-          ))}
+          Type:
+        </label>
+        <select
+          className="p-1 bg-white text-center"
+          name="productType"
+          id="productType"
+          value={type}
+          onChange={handleTypeChange}
+        >
+          <option
+            value=""
+            disabled
+          >
+            Select Type
+          </option>
+          <option value="DVD">DVD</option>
+          <option value="Furniture">Furniture</option>
+          <option value="Book">Book</option>
         </select>
       </div>
 
-      {isType === "Furniture" && (
+      {type === "Furniture" && (
         <FurnitureProperties
           height={height}
           onHeightChange={handleHeightChange}
@@ -178,21 +178,19 @@ const NewProductForm = (props) => {
           length={length}
           onLengthChange={handleLengthChange}
           type="number"
-      />
-          
+        />
       )}
-      {isType === "DVD" && (
+      {type === "DVD" && (
         <DVDProperties
           onChange={handleSizeChange}
           value={size}
           id="size"
           type="number"
         />
-         
       )}
-      {isType === "Book" && (
+      {type === "Book" && (
         <BookProperties
-          onChange={(event) => handleWeightChange(event)}
+          onChange={handleWeightChange}
           value={weight}
           id="weight"
           type="number"
@@ -200,14 +198,20 @@ const NewProductForm = (props) => {
       )}
 
       {/* SUBMIT BUTTON */}
-
-      <ButtonBlock
-        className="btn btn-primary bg-black hover:bg-slate-950"
-        type="submit"
-        // isDisabled={isToogled}
-      >
-        Save Product
-      </ButtonBlock>
+      <div className="flex justify-between gap-10">
+        <ButtonBlock
+          className="btn btn-error text-sm w-28 bg-red-500 hover:bg-red-400"
+          type="submit"
+        >
+          Cancel
+        </ButtonBlock>
+        <ButtonBlock
+          className="btn btn-primary w-28 text-sm hover:bg-slate-950"
+          type="submit"
+        >
+          Save
+        </ButtonBlock>
+      </div>
     </form>
   );
 };

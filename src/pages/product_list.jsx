@@ -1,42 +1,27 @@
-import { useState, useEffect, useContext } from "react";
 import ItemCardBlock from "../components/UI/ItemCardBlock";
-import { Block } from "million";
-import { API_URL } from "../config";
-import { useFetch } from "../components/Hooks/useFetch";
+import useSWR from 'swr';
+import axios from 'axios';
+
+const fetcher = url => axios.get(url).then(res => res.data)
 
 const ProductListPage = (props) => {
-  const [products, setProducts] = useState([]);
-  const [fetchData, isLoading, error] = useFetch("GET");
+  const { data, error, isLoading } = useSWR('http://localhost/e-commerce-app-kutalmis/products/exhibit', fetcher);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await fetchData(
-          "http://localhost/e-commerce-app-kutalmis/pages/get"
-        );
-        setProducts(data.products ?? []);
-      } catch (error) {
-        setProducts([]);
-      }
-    };
-
-    fetchProducts();
-    
-  }, [fetchData]);
+  
 
   return (
     <section
       className={`min-h-[62vh] w-screen  ${
-        props.items.length > 0
-          ? "grid sm:grid-cols-3 md:grid-cols-5 gap-10"
+        data && data.products && data.products.length > 0
+          ? "grid sm:grid-cols-3 md:grid-cols-4 gap-10"
           : "flex flex-col justify-center items-center"
-      } px-5 my-10`}
+      } px-5 mt-[18vh] mb-10`}
     >
       {isLoading ? (
         <span className="loading loading-ball loading-md"></span>
       ) : (
-        products &&
-        products.map((item) => (
+        data &&
+        data.products.map((item) => (
           <ItemCardBlock
             key={item.product_id}
             name={item.product_name}
