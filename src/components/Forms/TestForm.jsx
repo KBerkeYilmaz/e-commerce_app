@@ -4,13 +4,10 @@ import Button from "../UI/ButtonBlock";
 import { useNavigate } from "react-router-dom";
 import DVDProperties from "./FormItems/__TypeProperties/DVDProperties";
 import BookProperties from "./FormItems/__TypeProperties/BookProperties";
-import { useFetch } from "../Hooks/useFetch";
-import { mutate } from "swr";
-import { API_URL } from "../../config";
 
 export default function TestForm() {
   const { register, handleSubmit, formState, reset, watch } = useForm();
-  const [fetchData, isLoading, error] = useFetch("POST");
+  const onSubmit = (data) => console.log(data);
 
   const productType = watch("productType");
 
@@ -19,25 +16,6 @@ export default function TestForm() {
   const handleCancel = () => {
     reset();
     navigate("/product_list");
-  };
-
-  const onSubmit = async (data) => {
-    
-    const formData = {
-      product_sku: data.sku,
-      product_name: data.name,
-      product_price: data.price,
-      product_type: data.productType,
-      size: data.size,
-    };
-
-    try {
-      await fetchData(API_URL + "/products/new", formData);
-      mutate(API_URL + "/products/exhibit");
-      navigate("/product_list");
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
   const formElements = [
