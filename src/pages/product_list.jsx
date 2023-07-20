@@ -1,13 +1,20 @@
 import ItemCardBlock from "../components/UI/ItemCardBlock";
-import useSWR from 'swr';
-import axios from 'axios';
+import useSWR from "swr";
+import axios from "axios";
 
-const fetcher = url => axios.get(url).then(res => res.data)
-
+const fetcher = async (url) => {
+  try {
+    const res = await axios.get(url);
+    return res.data;
+  } catch (error) {
+    throw new Error("An error occurred while fetching the data.");
+  }
+};
 const ProductListPage = (props) => {
-  const { data, error, isLoading } = useSWR('http://localhost/e-commerce-app-kutalmis/products/exhibit', fetcher);
-
-  
+  const { data, error, isLoading } = useSWR(
+    "http://localhost/e-commerce-app-kutalmis/products/exhibit",
+    fetcher
+  );
 
   return (
     <section

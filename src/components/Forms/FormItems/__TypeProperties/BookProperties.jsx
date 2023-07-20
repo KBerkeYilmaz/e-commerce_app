@@ -8,10 +8,13 @@ const BookProperties = (props) => {
       <Input
         id={props.id}
         type={props.type}
-        value={props.value}
-        onChange={props.onChange}
+        register={props.register}
+        formState={props.formState}
+        rules={props.rules}
+        required
+        errorMessage={props.errorMessage}
       >
-        Weight
+        <h3>{props.title}</h3>
       </Input>
       <p className="text-lg">Please provide weight in kilograms(kg).</p>
     </>

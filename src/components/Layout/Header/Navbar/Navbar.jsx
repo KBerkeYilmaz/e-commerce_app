@@ -1,7 +1,12 @@
 import utility from "../../../Utility/Utility.module.css";
 import { Link, useLocation } from "react-router-dom";
+import { useStore } from "../../../../state/store";
 
 function Navbar(props) {
+  const selectedItems = useStore((state) => state.selectedItems);
+  const deleteSelected = useStore((state) => state.deleteSelected);
+  const deleteAll = useStore((state) => state.deleteAll);
+
   const location = useLocation();
 
   let title;
@@ -12,7 +17,6 @@ function Navbar(props) {
     case "/new_product":
       title = "New Product";
       break;
-    // Add more cases as needed
     default:
       title = "Product List";
   }
@@ -25,20 +29,23 @@ function Navbar(props) {
         >
           {location.pathname === "/product_list" && (
             <div className="h-fit w-fit flex gap-6">
-              <button className="btn btn-warning disabled rounded-md text-xl">
+              <button
+                className="btn btn-warning rounded-md text-sm"
+                disabled={selectedItems.length === 0}
+                onClick={deleteSelected}
+              >
                 Delete Selected
               </button>
-              <button className="btn btn-error rounded-md text-xl">
+              <button
+                className="btn btn-error rounded-md text-sm"
+                onClick={deleteAll}
+              >
                 Mass Delete
-              </button>{" "}
+              </button>
+
+              <Link to="/new_product" className="btn btn-primary">Add Product</Link>
             </div>
           )}
-          <li>
-            <Link to="/product_list">Product List</Link>
-          </li>
-          <li>
-            <Link to="/new_product">Add Product</Link>
-          </li>
         </ul>
       </div>
     </nav>

@@ -8,7 +8,7 @@ import { useFetch } from "../Hooks/useFetch";
 import { mutate } from "swr";
 import { API_URL } from "../../config";
 
-export default function TestForm() {
+const NewProductForm = () => {
   const { register, handleSubmit, formState, reset, watch } = useForm();
   const [fetchData, isLoading, error] = useFetch("POST");
 
@@ -22,14 +22,26 @@ export default function TestForm() {
   };
 
   const onSubmit = async (data) => {
-    
-    const formData = {
+    let formData = {
       product_sku: data.sku,
       product_name: data.name,
       product_price: data.price,
       product_type: data.productType,
-      size: data.size,
     };
+    console.log(formData)
+    switch (data.productType) {
+      case 'dvd':
+        formData = { ...formData, size: data.size ? Number(data.size) : null };
+        break;
+      case 'book':
+        formData = { ...formData, weight: data.weight ? Number(data.weight) : null };
+        break;
+      case 'furniture':
+        formData = { ...formData, height: data.height ? Number(data.height) : null, width: data.width ? Number(data.width) : null, length: data.length ? Number(data.length) : null };
+        break;
+      default:
+        break;
+    }
 
     try {
       await fetchData(API_URL + "/products/new", formData);
@@ -81,7 +93,7 @@ export default function TestForm() {
 
   return (
     <form
-      className={`w-1/3 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid flex flex-col justify-center items-center gap-5 rounded-lg`}
+      className={`md:w-1/4 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid flex flex-col justify-center items-center gap-5 rounded-lg`}
       onSubmit={handleSubmit(onSubmit)}
       id="product_form"
     >
@@ -235,3 +247,6 @@ export default function TestForm() {
     </form>
   );
 }
+
+
+export default NewProductForm;

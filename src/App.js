@@ -1,10 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useState, useEffect } from 'react';
 import Layout from "./components/Layout/Layout";
 import ProductListPage from "./pages/product_list";
 import NewProductPage from "./pages/new_product";
 import axios from 'axios';
-import { useFetch } from "./components/Hooks/useFetch";
 import useSWR from 'swr'
 
 const fetcher = url => axios.get(url).then(res => res.data)
