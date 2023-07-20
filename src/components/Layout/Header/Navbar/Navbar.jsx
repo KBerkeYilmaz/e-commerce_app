@@ -5,7 +5,6 @@ import { useStore } from "../../../../state/store";
 function Navbar(props) {
   const selectedItems = useStore((state) => state.selectedItems);
   const deleteSelected = useStore((state) => state.deleteSelected);
-  const deleteAll = useStore((state) => state.deleteAll);
 
   const location = useLocation();
 
@@ -14,8 +13,8 @@ function Navbar(props) {
     case "/product_list":
       title = "Product List";
       break;
-    case "/new_product":
-      title = "New Product";
+    case "/product_add":
+      title = "Product Add";
       break;
     default:
       title = "Product List";
@@ -30,20 +29,14 @@ function Navbar(props) {
           {location.pathname === "/product_list" && (
             <div className="h-fit w-fit flex gap-6">
               <button
-                className="btn btn-warning rounded-md text-sm"
+                className="btn btn-error rounded-md text-sm"
                 disabled={selectedItems.length === 0}
                 onClick={deleteSelected}
+                id="delete-product-btn"
               >
-                Delete Selected
+                MASS DELETE
               </button>
-              <button
-                className="btn btn-error rounded-md text-sm"
-                onClick={deleteAll}
-              >
-                Mass Delete
-              </button>
-
-              <Link to="/new_product" className="btn btn-primary">Add Product</Link>
+              <Link to="/product_add" className="btn btn-primary">ADD</Link>
             </div>
           )}
         </ul>

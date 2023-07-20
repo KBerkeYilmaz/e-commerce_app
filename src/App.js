@@ -1,28 +1,30 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import ProductListPage from "./pages/product_list";
-import NewProductPage from "./pages/new_product";
-import axios from 'axios';
-import useSWR from 'swr'
-
-const fetcher = url => axios.get(url).then(res => res.data)
-
+import AddProduct from "./pages/product_add";
 
 function App() {
-  const { data, error, isLoading } = useSWR('http://localhost/e-commerce-app-kutalmis/products/exhibit', fetcher);
   return (
     <Router>
       <Layout>
         <Routes>
           <Route
-            path="/product_list"
-            element={<ProductListPage items={data} error={error} isLoading={isLoading} />}
+            path="/"
+            element={<Navigate to="/product_list" />}
           />
           <Route
-            path="/new_product"
-            element={<NewProductPage />}
+            path="/product_list"
+            element={<ProductListPage />}
           />
-          {/* Add more routes as needed */}
+          <Route
+            path="/product_add"
+            element={<AddProduct />}
+          />
         </Routes>
       </Layout>
     </Router>

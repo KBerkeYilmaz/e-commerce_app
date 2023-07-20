@@ -9,6 +9,7 @@ import { mutate } from "swr";
 import { API_URL } from "../../config";
 
 const NewProductForm = () => {
+
   const { register, handleSubmit, formState, reset, watch } = useForm();
   const [fetchData, isLoading, error] = useFetch("POST");
 
@@ -28,7 +29,6 @@ const NewProductForm = () => {
       product_price: data.price,
       product_type: data.productType,
     };
-    console.log(formData)
     switch (data.productType) {
       case 'dvd':
         formData = { ...formData, size: data.size ? Number(data.size) : null };
@@ -46,10 +46,12 @@ const NewProductForm = () => {
     try {
       await fetchData(API_URL + "/products/new", formData);
       mutate(API_URL + "/products/exhibit");
-      navigate("/product_list");
+      navigate("/product_list"); 
     } catch (error) {
       console.error("Error:", error);
     }
+    
+
   };
 
   const formElements = [
@@ -60,7 +62,7 @@ const NewProductForm = () => {
       title: "SKU",
       rules: { required: true, minLength: 5, maxLength: 20 },
       errorMessage: {
-        required: "This field is required",
+        required: "Please, submit required data",
         minLength: "This field requires minimum 5 characters",
         maxLength: "This field can not exceed 20 characters",
       },
@@ -72,7 +74,7 @@ const NewProductForm = () => {
       title: "Name",
       rules: { required: true, minLength: 3, maxLength: 15 },
       errorMessage: {
-        required: "This field is required",
+        required: "Please, submit required data",
         minLength: "This field requires minimum 3 characters",
         maxLength: "This field can not exceed 15 characters",
       },
@@ -84,7 +86,7 @@ const NewProductForm = () => {
       title: "Price ($)",
       rules: { required: true, min: 0, max: 9999 },
       errorMessage: {
-        required: "This field is required",
+        required: "Please, submit required data",
         min: "Can not go lower than 1",
         max: "Can not go higher than 9999",
       },
@@ -93,11 +95,31 @@ const NewProductForm = () => {
 
   return (
     <form
-      className={`md:w-1/4 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid flex flex-col justify-center items-center gap-5 rounded-lg`}
+      className={`sm:2/3 md:w-1/2 lg:w-1/2 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid flex flex-col justify-center items-center gap-5 rounded-lg`}
       onSubmit={handleSubmit(onSubmit)}
       id="product_form"
     >
-      {formElements.map((item) => {
+
+      {isLoading ? (
+        <span className="loading loading-ball loading-md"></span>
+      ) : error ? (
+        <div className="alert alert-error w-1/6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>{error.message}</span>
+        </div>
+      ) : formElements.map((item) => {
         return (
           <Input
             key={item.key}
@@ -115,7 +137,7 @@ const NewProductForm = () => {
         );
       })}
 
-      <div className="relative w-3/5 border-2 border-black flex justify-between items-center">
+      <div className="relative w-5/6 border-2 border-black flex justify-between items-center">
         <label
           htmlFor="productType"
           className="pl-1"
@@ -149,7 +171,7 @@ const NewProductForm = () => {
           formState={formState}
           rules={{ required: true, min: 0, max: 9999 }}
           errorMessage={{
-            required: "This field is required",
+            required: "Please, submit required data",
             min: "Can not go lower than 1",
             max: "Can not go higher than 4500mb",
           }}
@@ -165,7 +187,7 @@ const NewProductForm = () => {
           formState={formState}
           rules={{ required: true, min: 0, max: 10 }}
           errorMessage={{
-            required: "This field is required",
+            required: "Please, submit required data",
             min: "Can not go lower than 1",
             max: "Can not go higher than 10kg",
           }}
@@ -184,7 +206,7 @@ const NewProductForm = () => {
             rules={{ required: true, min: 0, max: 9999 }}
             required
             errorMessage={{
-              required: "This field is required",
+              required: "Please, submit required data",
               min: "Can not go lower than 0",
               max: "Can not go higher than 20000",
             }}
@@ -200,7 +222,7 @@ const NewProductForm = () => {
             rules={{ required: true, min: 0, max: 9999 }}
             required
             errorMessage={{
-              required: "This field is required",
+              required: "Please, submit required data",
               min: "Can not go lower than 0",
               max: "Can not go higher than 20000",
             }}
@@ -216,7 +238,7 @@ const NewProductForm = () => {
             rules={{ required: true, min: 0, max: 9999 }}
             required
             errorMessage={{
-              required: "This field is required",
+              required: "Please, submit required data",
               min: "Can not go lower than 0",
               max: "Can not go higher than 20000",
             }}

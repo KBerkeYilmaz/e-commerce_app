@@ -1,5 +1,5 @@
 import ItemCardBlock from "../components/UI/ItemCardBlock";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import axios from "axios";
 
 const fetcher = async (url) => {
@@ -7,38 +7,38 @@ const fetcher = async (url) => {
     const res = await axios.get(url);
     return res.data;
   } catch (error) {
+    if (error.response && error.response.status === 500) {
+      throw new Error('No products available.');
+    }
     throw new Error("An error occurred while fetching the data.");
   }
 };
-const ProductListPage = (props) => {
+const ProductListPage = () => {
+    
   const { data, error, isLoading } = useSWR(
     "http://localhost/e-commerce-app-kutalmis/products/exhibit",
-    fetcher
+    fetcher,
+    { 
+      onError: (error) => {
+        if (error.message === 'No products available.') {
+          // Disable retries on 500 Server Error
+          mutate(null, false);
+        }
+      }
+    }
   );
 
-  return (
+  return(
     <section
       className={`min-h-[62vh] w-screen  ${
-        data && data.products && data.products.length > 0
-          ? "grid sm:grid-cols-3 md:grid-cols-4 gap-10"
+        data && data.products && data.products.length > 0 && !error
+          ? "grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10"
           : "flex flex-col justify-center items-center"
       } px-5 mt-[18vh] mb-10`}
     >
       {isLoading ? (
         <span className="loading loading-ball loading-md"></span>
-      ) : (
-        data &&
-        data.products.map((item) => (
-          <ItemCardBlock
-            key={item.product_id}
-            name={item.product_name}
-            sku={item.product_sku}
-            price={item.product_price}
-            type={item.product_type}
-          />
-        ))
-      )}
-      {error && (
+      ) : error ? (
         <div className="alert alert-error w-1/6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,6 +55,21 @@ const ProductListPage = (props) => {
           </svg>
           <span>{error.message}</span>
         </div>
+      ) : (
+        data.products.map((item) => (
+          <ItemCardBlock
+            key={item.product_id}
+            name={item.product_name}
+            sku={item.product_sku}
+            price={item.product_price}
+            type={item.product_type}
+            size={item.dvd_size}
+            height={item.furniture_height}
+            weight={item.book_weight}
+            width={item.furniture_width}
+            length={item.furniture_length}
+          />
+        ))
       )}
     </section>
   );
