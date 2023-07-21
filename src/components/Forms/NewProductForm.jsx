@@ -9,7 +9,6 @@ import { mutate } from "swr";
 import { API_URL } from "../../config";
 
 const NewProductForm = () => {
-
   const { register, handleSubmit, formState, reset, watch } = useForm();
   const [fetchData, isLoading, error] = useFetch("POST");
 

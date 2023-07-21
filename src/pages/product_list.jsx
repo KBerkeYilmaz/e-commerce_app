@@ -1,6 +1,7 @@
 import ItemCardBlock from "../components/UI/ItemCardBlock";
-import useSWR, { mutate } from "swr";
+import  useSWR , { mutate } from "swr";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const fetcher = async (url) => {
   try {
@@ -16,7 +17,7 @@ const fetcher = async (url) => {
 const ProductListPage = () => {
     
   const { data, error, isLoading } = useSWR(
-    "http://localhost/e-commerce-app-kutalmis/products/exhibit",
+    API_URL + "/products/exhibit",
     fetcher,
     { 
       onError: (error) => {
@@ -27,11 +28,10 @@ const ProductListPage = () => {
       }
     }
   );
-
   return(
     <section
       className={`min-h-[62vh] w-screen  ${
-        data && data.products && data.products.length > 0 && !error
+        data?.products?.length > 0 && !error
           ? "grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10"
           : "flex flex-col justify-center items-center"
       } px-5 mt-[18vh] mb-10`}

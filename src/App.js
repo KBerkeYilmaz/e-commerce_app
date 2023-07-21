@@ -10,24 +10,25 @@ import AddProduct from "./pages/product_add";
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route
-            path="/"
-            element={<Navigate to="/product_list" />}
-          />
-          <Route
-            path="/product_list"
-            element={<ProductListPage />}
-          />
-          <Route
-            path="/product_add"
-            element={<AddProduct />}
-          />
-        </Routes>
-      </Layout>
-    </Router>
+    
+      <Router>
+        <Layout>
+          <Routes>
+            <Route
+              path="/"
+              element={<Navigate to="/product_list" />}
+            />
+            <Route
+              path="/product_list"
+              element={<ProductListPage />}
+            />
+            <Route
+              path="/product_add"
+              element={<AddProduct />}
+            />
+          </Routes>
+        </Layout>
+      </Router>
   );
 }
 

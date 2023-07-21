@@ -24,7 +24,7 @@ function ItemCard({
     }
   };
   return (
-    <div className="p-20 md:h-[38vh] relative text-black border-4 border-slate-900 border-solid rounded-lg shadow-md shadow-gray-600 flex flex-col justify-center items-center gap-3">
+    <div className="p-20 md:h-[44vh] relative text-black border-4 border-slate-900 border-solid rounded-lg shadow-md shadow-gray-600 flex flex-col justify-center items-center gap-3">
       <div className="cursor-pointer">
         
         <button

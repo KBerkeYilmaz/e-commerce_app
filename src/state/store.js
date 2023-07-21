@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import { mutate } from "swr";
+import { API_URL } from "../config";
 
 export const useStore = create((set) => ({
   selectedItems: [],
@@ -16,7 +17,7 @@ export const useStore = create((set) => ({
     // Create an array of DELETE requests
     const deleteRequests = selectedItems.map((sku) =>
       axios.delete(
-        `http://localhost/e-commerce-app-kutalmis/products/delete/${sku}`
+        `${API_URL}/products/delete/${sku}`
       )
     );
 
@@ -27,7 +28,7 @@ export const useStore = create((set) => ({
         // If all responses have status code 200, then proceed to mutate and clear selection
         if (responses.every((response) => response.status === 200)) {
           await mutate(
-            "http://localhost/e-commerce-app-kutalmis/products/exhibit"
+            API_URL + "/products/exhibit"
           );
           useStore.setState({ selectedItems: [] });
         } else {
