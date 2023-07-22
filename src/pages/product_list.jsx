@@ -2,7 +2,6 @@ import ItemCardBlock from "../components/UI/ItemCardBlock";
 import  useSWR from "swr";
 import axios from "axios";
 import { API_URL } from "../config";
-import { useStore } from "../state/store";
 
 const fetcher = async (url) => {
   try {
