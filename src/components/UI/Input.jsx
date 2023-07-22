@@ -8,7 +8,7 @@ const Input = ({
   errorMessage,
 }) => {
   return (
-    <div className="relative w-5/6">
+    <div className="relative w-5/6 lg:w-4/6">
       <input
         className={`w-full block appearance-none focus:ring-0 focus:bg-slate-100 focus:outline-slate-200 border-2 rounded-sm bg-white text-black peer border-black`}
         placeholder=" "

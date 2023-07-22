@@ -1,11 +1,12 @@
 import ItemCardBlock from "../components/UI/ItemCardBlock";
-import  useSWR , { mutate } from "swr";
+import  useSWR from "swr";
 import axios from "axios";
 import { API_URL } from "../config";
+import { useStore } from "../state/store";
 
 const fetcher = async (url) => {
   try {
-    const res = await axios.get(url);
+    const res = await axios.get(url, { params: { _: Date.now() } });
     return res.data;
   } catch (error) {
     if (error.response && error.response.status === 500) {
@@ -15,18 +16,9 @@ const fetcher = async (url) => {
   }
 };
 const ProductListPage = () => {
-    
   const { data, error, isLoading } = useSWR(
     API_URL + "/products/exhibit",
-    fetcher,
-    { 
-      onError: (error) => {
-        if (error.message === 'No products available.') {
-          // Disable retries on 500 Server Error
-          mutate(null, false);
-        }
-      }
-    }
+    fetcher
   );
   return(
     <section

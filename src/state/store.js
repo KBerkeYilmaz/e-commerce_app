@@ -4,6 +4,7 @@ import { mutate } from "swr";
 import { API_URL } from "../config";
 
 export const useStore = create((set) => ({
+  products: [],
   selectedItems: [],
   addToSelected: (item) =>
     set((state) => ({ selectedItems: [...state.selectedItems, item] })),
@@ -16,9 +17,7 @@ export const useStore = create((set) => ({
 
     // Create an array of DELETE requests
     const deleteRequests = selectedItems.map((sku) =>
-      axios.delete(
-        `${API_URL}/products/delete/${sku}`
-      )
+      axios.delete(`${API_URL}/products/delete/${sku}`)
     );
 
     // Execute all DELETE requests
@@ -27,9 +26,7 @@ export const useStore = create((set) => ({
       .then(async (responses) => {
         // If all responses have status code 200, then proceed to mutate and clear selection
         if (responses.every((response) => response.status === 200)) {
-          await mutate(
-            API_URL + "/products/exhibit"
-          );
+          await mutate(API_URL + "/products/exhibit");
           useStore.setState({ selectedItems: [] });
         } else {
           throw new Error("Not all delete requests were successful");
@@ -54,5 +51,5 @@ export const useStore = create((set) => ({
       .catch((error) => {
         console.error("Error deleting all items:", error);
       });
-  },
+  }
 }));

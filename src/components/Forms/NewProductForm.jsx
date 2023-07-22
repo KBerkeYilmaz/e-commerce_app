@@ -7,6 +7,9 @@ import BookProperties from "./FormItems/__TypeProperties/BookProperties";
 import { useFetch } from "../Hooks/useFetch";
 import { mutate } from "swr";
 import { API_URL } from "../../config";
+import { useStore } from "../../state/store";
+import axios from "axios";
+
 
 const NewProductForm = () => {
   const { register, handleSubmit, formState, reset, watch } = useForm();
@@ -45,6 +48,7 @@ const NewProductForm = () => {
     try {
       await fetchData(API_URL + "/products/new", formData);
       mutate(API_URL + "/products/exhibit");
+      // useStore.getState().fetchAndUpdateProducts();
       navigate("/product_list"); 
     } catch (error) {
       console.error("Error:", error);
@@ -94,7 +98,7 @@ const NewProductForm = () => {
 
   return (
     <form
-      className={`sm:2/3 md:w-1/2 lg:w-1/2 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid flex flex-col justify-center items-center gap-5 rounded-lg`}
+      className={`sm:3/4 md:w-1/2 lg:w-1/3 h-fit p-12 mt-[15vh] text-black border-4 border-slate-900 border-solid flex flex-col justify-center items-center gap-5 rounded-lg`}
       onSubmit={handleSubmit(onSubmit)}
       id="product_form"
     >
@@ -136,7 +140,7 @@ const NewProductForm = () => {
         );
       })}
 
-      <div className="relative w-5/6 border-2 border-black flex justify-between items-center">
+      <div className="relative w-5/6 lg:w-4/6 border-2 border-black flex justify-between items-center">
         <label
           htmlFor="productType"
           className="pl-1"
@@ -168,7 +172,7 @@ const NewProductForm = () => {
           type="number"
           register={register}
           formState={formState}
-          rules={{ required: true, min: 0, max: 9999 }}
+          rules={{ required: true, min: 0, max: 4500 }}
           errorMessage={{
             required: "Please, submit required data",
             min: "Can not go lower than 1",
@@ -184,11 +188,11 @@ const NewProductForm = () => {
           type="number"
           register={register}
           formState={formState}
-          rules={{ required: true, min: 0, max: 10 }}
+          rules={{ required: true, min: 0, max: 50 }}
           errorMessage={{
             required: "Please, submit required data",
             min: "Can not go lower than 1",
-            max: "Can not go higher than 10kg",
+            max: "Can not go higher than 50kg",
           }}
           title="Weight"
           required
@@ -202,7 +206,7 @@ const NewProductForm = () => {
             type="number"
             register={register}
             formState={formState}
-            rules={{ required: true, min: 0, max: 9999 }}
+            rules={{ required: true, min: 0, max: 20000 }}
             required
             errorMessage={{
               required: "Please, submit required data",
@@ -218,7 +222,7 @@ const NewProductForm = () => {
             type="number"
             register={register}
             formState={formState}
-            rules={{ required: true, min: 0, max: 9999 }}
+            rules={{ required: true, min: 0, max: 20000 }}
             required
             errorMessage={{
               required: "Please, submit required data",
@@ -234,7 +238,7 @@ const NewProductForm = () => {
             type="number"
             register={register}
             formState={formState}
-            rules={{ required: true, min: 0, max: 9999 }}
+            rules={{ required: true, min: 0, max: 20000 }}
             required
             errorMessage={{
               required: "Please, submit required data",

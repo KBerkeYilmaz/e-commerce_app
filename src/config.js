@@ -1,2 +1,2 @@
-export const API_URL = 'https://www.kberkeyilmaztest.shop';
+export const API_URL = "https://www.kberkeyilmaztest.shop";
 
