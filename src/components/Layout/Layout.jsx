@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
     <div className="w-screen min-h-screen overflow-x-hidden text-black flex flex-col bg-white ">
       <Header />
       <main className="flex-grow">{children}</main>
-      <Footer>Scandiweb Test Application</Footer>
+      <Footer>API Server Test Application</Footer>
     </div>
   );
 }; 
